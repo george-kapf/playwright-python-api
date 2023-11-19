@@ -44,16 +44,17 @@ def test_data_type():
     fetched_data = json.loads(fetched_data_str)
 
     # Validate the structure of the fetched data
-    assert "signature" in fetched_data
-    assert "count" in fetched_data
-    assert "fields" in fetched_data
-    assert "data" in fetched_data
+    assert set(fetched_data.keys()) == {"signature", "count", "fields", "data"}
 
     # Check the types of the fields
-    assert isinstance(fetched_data["signature"], dict)
-    assert isinstance(fetched_data["count"], int)
-    assert isinstance(fetched_data["fields"], list)
-    assert isinstance(fetched_data["data"], list)
+    field_types = {
+        "signature": dict,
+        "count": int,
+        "fields": list,
+        "data": list
+    }
+    for field, expected_type in field_types.items():
+        assert isinstance(fetched_data[field], expected_type)
 
 def test_data_values():
     # Fetch data from the NASA API
@@ -67,4 +68,3 @@ def test_data_values():
 # Run the tests and generate an HTML report
 if __name__ == "__main__":
     pytest.main(["-v", "--html=report.html", __file__])
-
